@@ -1,0 +1,51 @@
+<section class="club-slider">
+  <h2 class="visually-hidden">Le club</h2>
+  <div class="club-slider__slider">
+    {% for block in section.blocks %}
+      <div class="club-slider__item">
+        <img
+          src="{{ block.settings.image | image_url: width: 400 }}"
+          alt="{{ block.settings.alt }}"
+          width="400"
+          height="400"
+        >
+        <span class="club-slider__caption">{{ block.settings.caption }}</span>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Slider Le Club",
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Texte alternatif"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Légende"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slider Le Club",
+      "blocks": [{ "type": "slide" }, { "type": "slide" }]
+    }
+  ]
+}
+{% endschema %}

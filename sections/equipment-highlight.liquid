@@ -1,0 +1,35 @@
+<section class="equipment-highlight">
+  <div class="equipment-highlight__image">
+    <img src="{{ section.settings.image | image_url: width: 600 }}" alt="Équipement padel" width="600" height="600">
+  </div>
+  <div class="equipment-highlight__content">
+    <h2>{{ section.settings.title }}</h2>
+    <p>{{ section.settings.text }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bloc Équipement",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image de fond"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "CHANGEZ POUR UN ÉQUIPEMENT PADEL QUI VOUS RESSEMBLE"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte",
+      "default": "Découvrez notre sélection d'équipements et d'accessoires afin de mieux vous équiper pour vos sessions de Padel."
+    }
+  ],
+  "presets": [{ "name": "Bloc Équipement" }]
+}
+{% endschema %}

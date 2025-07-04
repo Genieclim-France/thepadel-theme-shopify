@@ -1,0 +1,78 @@
+<section class="club-cta">
+  <h2>{{ section.settings.title }}</h2>
+  <p>{{ section.settings.text }}</p>
+  <a href="{{ section.settings.cta_link }}" class="btn btn--primary">{{ section.settings.cta_text }}</a>
+  {% if section.settings.logo %}
+    <img
+      src="{{ section.settings.logo | image_url: width: 200 }}"
+      alt="Logo club"
+      class="club-cta__logo"
+      width="200"
+      height="200"
+    >
+  {% endif %}
+  <div class="club-cta__infos">
+    <p>{{ section.settings.address }}</p>
+    <p>{{ section.settings.hours }}</p>
+    <p>{{ section.settings.phone }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Call-to-action Club",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "VIVEZ LA PASSION DU PADEL AVEC NOUS EN GIRONDE"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texte",
+      "default": "Profitez d'infrastructures modernes et d'une ambiance conviviale dans notre centre près de Bordeaux."
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Lien du bouton"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texte du bouton",
+      "default": "RÉSERVER UN TERRAIN"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Adresse",
+      "default": "20 Avenue Jean Mermoz, 33815 LE HAILLAN"
+    },
+    {
+      "type": "textarea",
+      "id": "hours",
+      "label": "Horaires",
+      "default": "Lun - Ven : 8h30 - 19h30<br>Sam - Dim : 9h00 - 20h00"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Téléphone",
+      "default": "06 47 45 40 70"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Call-to-action Club"
+    }
+  ]
+}
+{% endschema %}

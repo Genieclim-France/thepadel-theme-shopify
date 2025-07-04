@@ -1,0 +1,86 @@
+<section class="product-carousel">
+  <h2>{{ section.settings.title }}</h2>
+  <div class="product-carousel__slider">
+    {% for block in section.blocks %}
+      <div class="product-carousel__item">
+        <img
+          src="{{ block.settings.image | image_url: width: 200 }}"
+          alt="{{ block.settings.title }}"
+          width="200"
+          height="200"
+        >
+        <div class="product-carousel__info">
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.price }}</p>
+          <a href="{{ block.settings.link }}" class="product-carousel__cta" aria-label="Voir le produit">
+            <svg width="24" height="24" fill="none">
+              <rect width="24" height="24" rx="4" fill="#0099f7"/><path d="M8 12h8M16 12l-3-3m3 3l-3 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        <div class="product-carousel__brand">
+          <img src="{{ block.settings.brand | image_url: width: 40 }}" alt="Marque" width="40" height="40">
+          <span>{{ block.settings.brand_name }}</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Carrousel Produits",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "NOS T-SHIRT THE PADEL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Produit",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image produit"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Nom du produit"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Prix"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Lien produit"
+        },
+        {
+          "type": "image_picker",
+          "id": "brand",
+          "label": "Logo marque"
+        },
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Nom marque"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Carrousel Produits",
+      "blocks": [{ "type": "product" }, { "type": "product" }]
+    }
+  ]
+}
+{% endschema %}
