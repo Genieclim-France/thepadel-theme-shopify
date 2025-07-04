@@ -1,0 +1,583 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap');
+
+/* Reset spécifique à notre navbar */
+body .padel-navbar * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body .padel-navbar .font-raleway,
+body .font-raleway {
+  font-family: 'Raleway', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+}
+
+body .padel-navbar .font-impact,
+body .font-impact {
+  font-family: 'Impact', 'Arial Black', Arial, sans-serif;
+  font-weight: 700;
+}
+
+/* THE PADEL NAVBAR - Style inspiré Astro, adapté Shopify */
+
+:root {
+  --navbar-bg: #0099f7;
+  --navbar-bg-gradient: linear-gradient(90deg, #0099f7 0%, #12c2e9 100%);
+  --navbar-link: #fff;
+  --navbar-link-hover: #e0f2ff;
+  --navbar-divider: rgba(255,255,255,0.4);
+}
+
+/* === MOBILE FIRST === */
+body .padel-navbar {
+  position: relative;
+  top: 0; 
+  left: 0; 
+  width: 100%;
+  z-index: 5;
+  color: var(--navbar-link);
+  background: var(--navbar-bg);
+}
+
+body .padel-navbar .padel-navbar-inner {
+  width: 100%;
+  padding: 2rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4.5rem !important;
+  margin: 0;
+}
+
+body .padel-navbar .padel-navbar-logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+body .padel-navbar .padel-navbar-logo img {
+  height: 2rem;
+  width: auto;
+  display: block;
+}
+
+body .padel-navbar .padel-navbar-logo-text {
+  font-size: 1.3rem;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: 'Impact', 'Arial Black', Arial, sans-serif;
+}
+
+body .padel-navbar .padel-navbar-divider {
+  display: none;
+}
+
+body .padel-navbar .padel-navbar-links {
+  display: none;
+}
+
+body .padel-navbar .padel-navbar-link {
+  color: var(--navbar-link);
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: background 0.2s, color 0.2s;
+  font-family: 'Raleway', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+}
+
+body .padel-navbar .padel-navbar-link:hover {
+  background: rgba(0,0,0,0.08);
+  color: var(--navbar-link-hover);
+}
+
+body .padel-navbar .padel-navbar-mobile-btn {
+  display: block;
+  background: none;
+  border: none;
+  color: var(--navbar-link);
+  font-size: 2rem;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+/* Mobile menu overlay */
+body .padel-navbar .padel-navbar-mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--navbar-bg-gradient);
+  color: var(--navbar-link);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+}
+
+body .padel-navbar .padel-navbar-mobile-menu.open {
+  display: flex;
+}
+
+body .padel-navbar .padel-navbar-mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: center;
+  font-family: 'Raleway', ui-sans-serif, system-ui, sans-serif;
+}
+
+body .padel-navbar .padel-navbar-mobile-link {
+  color: var(--navbar-link);
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  font-family: 'Raleway', ui-sans-serif, system-ui, sans-serif;
+}
+
+body .padel-navbar .padel-navbar-mobile-link:hover {
+  color: var(--navbar-link-hover);
+}
+
+body .padel-navbar .padel-navbar-mobile-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--navbar-link);
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+/* Séparateur mobile avant le bouton menu */
+body .padel-navbar .padel-navbar-inner > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+body .padel-navbar .padel-navbar-mobile-divider {
+  display: block;
+  width: 1px;
+  height: 2rem;
+  background: #fff;
+  margin: 0 0.3rem;
+}
+
+/* Styles pour les boutons d'action (compte et panier) */
+body .padel-navbar .padel-navbar-actions {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+
+body .padel-navbar .padel-navbar-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navbar-link);
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+body .padel-navbar .padel-navbar-action:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Styles pour les icônes du thème de base */
+body .padel-navbar .header__icon .svg-wrapper {
+  width: 44px;
+  height: 44px;
+  color: currentColor;
+  fill: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Correction spécifique pour l'icône du panier */
+body .padel-navbar #cart-icon-bubble .svg-wrapper svg {
+  transform: none;
+  transform-origin: center;
+}
+
+body .padel-navbar .header__icon .svg-wrapper svg {
+  fill: #fff;
+}
+
+body .padel-navbar .header__icon .icon {
+  fill: #fff;
+}
+
+body .padel-navbar .header__icon,
+body .padel-navbar .header__icon--cart .icon {
+  height: 44px;
+  width: 44px;
+  padding: 0;
+}
+
+body .padel-navbar .cart-count-bubble {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #fff;
+  color: var(--navbar-bg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+}
+
+/* Styles pour les actions dans le menu mobile */
+body .padel-navbar .padel-navbar-mobile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+body .padel-navbar .padel-navbar-mobile-action {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--navbar-link);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+body .padel-navbar .padel-navbar-mobile-action:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+body .padel-navbar .padel-navbar-mobile-action .svg-wrapper,
+body .padel-navbar .padel-navbar-mobile-action .icon {
+  height: 24px;
+  width: 24px;
+  fill: #fff;
+}
+
+body .padel-navbar .padel-navbar-mobile-action .cart-count-bubble.mobile {
+  position: relative;
+  display: inline-flex;
+  background-color: #fff;
+  color: var(--navbar-bg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+  margin-left: 0.5rem;
+  top: 0;
+  right: 0;
+}
+
+/* === DESKTOP (min-width: 640px) === */
+@media (min-width: 640px) {
+  body .padel-navbar .padel-navbar-inner {
+    margin-left: auto;
+    padding: 0 2rem;
+    height: 6rem !important;
+  }
+  
+  body .padel-navbar .padel-navbar-logo img {
+    height: 2.5rem;
+  }
+  
+  body .padel-navbar .padel-navbar-logo-text {
+    font-size: 2rem;
+  }
+  
+  body .padel-navbar .padel-navbar-divider {
+    display: block;
+    width: 1px;
+    height: 1.5rem;
+    background: var(--navbar-divider);
+    margin: 0 1.5rem;
+  }
+  
+  body .padel-navbar .padel-navbar-links {
+    display: flex;
+    font-size: 1.5rem;
+    align-items: center;
+    gap: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: 'Raleway', ui-sans-serif, system-ui, sans-serif;
+    margin-left: auto;
+  }
+  
+  body .padel-navbar .padel-navbar-link {
+    font-size: 1.5rem;
+  }
+  
+  body .padel-navbar .padel-navbar-mobile-btn {
+    display: none;
+  }
+  
+  body .padel-navbar .padel-navbar-mobile-divider {
+    display: none;
+  }
+  
+  body .padel-navbar .padel-navbar-actions {
+    display: flex;
+  }
+  
+  /* Ajuster l'alignement vertical de l'icône panier (desktop) */
+  body .padel-navbar .svg-wrapper .icon-cart,
+  body .padel-navbar #cart-icon-bubble .svg-wrapper .icon-cart {
+    transform: scale(1.75) translateY(1.5px) !important;
+    transform-origin: center;
+  }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  body .padel-navbar .padel-navbar-inner {
+    padding: 0 0.5rem;
+  }
+  
+  body .padel-navbar .padel-navbar-links {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  body .padel-navbar .padel-navbar-inner {
+    height: 3.5rem;
+  }
+  
+  body .padel-navbar .padel-navbar-logo-text {
+    font-size: 1.3rem;
+  }
+  
+  body .padel-navbar .padel-navbar-divider {
+    margin: 0 0.7rem;
+  }
+}
+
+@media (max-width: 640px) {
+  body .padel-navbar .padel-navbar-links {
+    display: none;
+  }
+  
+  body .padel-navbar .padel-navbar-mobile-btn {
+    display: block;
+  }
+  
+  body .padel-navbar .padel-navbar-mobile-divider {
+    display: none;
+  }
+}
+
+/* Nouvelle règle : même taille pour tous les SVG d'icônes dans la navbar */
+body .padel-navbar .svg-wrapper svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* Agrandir légèrement l'icône panier pour correspondre visuellement au profil */
+body .padel-navbar .svg-wrapper .icon-cart {
+  transform: scale(1.75);
+  transform-origin: center;
+}
+
+/* S'assurer que l'agrandissement s'applique aussi lorsque le lien porte l'ID cart-icon-bubble (vue desktop) */
+body .padel-navbar #cart-icon-bubble .svg-wrapper .icon-cart {
+  transform: scale(1.75);
+  transform-origin:center;
+}
+
+/* === SEARCH BAR === */
+body .padel-navbar .search-icon-mobile {
+  display: flex;
+}
+
+/* Cache l'icône recherche en desktop */
+@media (min-width: 640px) {
+  body .padel-navbar .search-icon-mobile {
+    display: none;
+  }
+}
+
+/* Formulaire desktop caché en mobile */
+body .padel-navbar .padel-navbar-search-desktop {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  body .padel-navbar .padel-navbar-search-desktop {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: #fff;
+    border-radius: 9999px;
+    padding: 0 0.5rem;
+    margin: 0 1rem;
+  }
+  body .padel-navbar .padel-navbar-search-input {
+    border: none;
+    outline: none;
+    padding: 0.5rem 0.5rem;
+    flex: 1;
+    font-size: 1rem;
+  }
+  body .padel-navbar .padel-navbar-search-button {
+    background: none;
+    border: none;
+    color: var(--navbar-bg);
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  body .padel-navbar .padel-navbar-search-button .svg-wrapper svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--navbar-bg);
+  }
+}
+
+/* Afficher l'icône recherche (header__search) seulement en mobile */
+body .padel-navbar .header__search {
+  display: block;
+}
+@media (min-width: 640px) {
+  body .padel-navbar .header__search {
+    display: none;
+  }
+}
+
+/* === Mobile Search UX Moderne === */
+body .padel-navbar-mobile-search-btn {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navbar-link);
+}
+
+/* Cacher le bouton en desktop */
+@media (min-width: 640px) {
+  body .padel-navbar-mobile-search-btn {
+    display: none;
+  }
+  body .padel-navbar-mobile-search {
+    display: none !important;
+  }
+}
+
+body .padel-navbar-mobile-search {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+body .padel-navbar-mobile-search.open {
+  transform: translateY(0);
+}
+
+body .padel-navbar-mobile-search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+body .padel-navbar-mobile-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px;
+  background: #f2f4f8;
+}
+
+body .padel-navbar-mobile-search-submit,
+body .padel-navbar-mobile-search-close {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navbar-bg);
+  cursor: pointer;
+}
+
+body .padel-navbar-mobile-search-submit .svg-wrapper svg,
+body .padel-navbar-mobile-search-close .svg-wrapper svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--navbar-bg);
+}
+
+/* === SUPPRESSION SEARCHBAR === */
+body .padel-navbar .padel-navbar-search-desktop,
+body .padel-navbar .padel-navbar-mobile-search,
+body .padel-navbar-mobile-search-btn {
+  display: none !important;
+}
+
+/* === NOUVEL ICONE RECHERCHE === */
+body .padel-navbar .padel-navbar-search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navbar-link);
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+body .padel-navbar .padel-navbar-search-icon:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--navbar-link-hover);
+}
+body .padel-navbar .padel-navbar-search-icon .svg-wrapper svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+@media (max-width: 639px) {
+  body .padel-navbar .padel-navbar-search-icon {
+    display: none !important;
+  }
+}

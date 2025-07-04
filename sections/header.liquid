@@ -1,472 +1,141 @@
-<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-<link
-  rel="stylesheet"
-  href="{{ 'component-cart-notification.css' | asset_url }}"
-  media="print"
-  onload="this.media='all'"
->
-<link rel="stylesheet" href="{{ 'thepadel-header.css' | asset_url }}">
-
-{%- if settings.predictive_search_enabled -%}
-  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
-
-<style>
-  .thepadel-header {
-    position: relative;
-    z-index: 10;
-  }
-
-  .thepadel-header .header {
-    padding: 0;
-  }
-</style>
-
-{%- style -%}
-  .section-header {
-    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-header {
-      margin-bottom: {{ section.settings.margin_bottom }}px;
-    }
-  }
-{%- endstyle -%}
-
-<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
-
-{% liquid
-  assign header_tag = 'div'
-
-  if section.settings.sticky_header_type != 'none'
-    assign header_tag = 'sticky-header'
-  endif
-%}
-
-<{{ header_tag }}
-  {% if header_tag == 'sticky-header' %}
-    data-sticky-type="{{ section.settings.sticky_header_type }}"
-  {% endif %}
-  class="thepadel-header"
->
-  <header class="header">
-    <!-- Header principal -->
-    <div class="thepadel-header-container">
-      <!-- Logo THE PADEL -->
-      <div class="thepadel-logo-section">
-        <a href="{{ routes.root_url }}" class="thepadel-logo"> THE PADEL </a>
-      </div>
-
-      <!-- Navigation desktop -->
-      <nav class="thepadel-nav">
-        <ul class="thepadel-nav-list">
-          <li class="thepadel-nav-item">
-            <a href="{{ routes.root_url }}" class="thepadel-nav-link">Accueil</a>
-          </li>
-          <li class="thepadel-nav-item">
-            <a href="{{ routes.collections_url }}/tournoi" class="thepadel-nav-link">Tournoi</a>
-          </li>
-          <li class="thepadel-nav-item">
-            <a href="{{ routes.collections_url }}" class="thepadel-nav-link">Boutique</a>
-          </li>
-          <li class="thepadel-nav-item">
-            <a href="{{ pages['equipe'].url | default: '/pages/equipe' }}" class="thepadel-nav-link"
-              >L'équipe The Padel</a
-            >
-          </li>
-          <li class="thepadel-nav-item">
-            <a href="{{ pages['contact'].url | default: '/pages/contact' }}" class="thepadel-nav-link">Contact</a>
-          </li>
-        </ul>
-      </nav>
-
-      <!-- Actions droite -->
-      <div class="thepadel-actions">
-        <!-- Bouton Réserver (desktop) -->
-        <a href="{{ pages['reservation'].url | default: '/pages/reservation' }}" class="thepadel-reserve-btn">
-          Réserver un terrain
+<nav class="padel-navbar">
+  <div class="padel-navbar-inner">
+    <!-- Logo -->
+    <div class="padel-navbar-logo">
+      {% if settings.logo != blank %}
+        <a href="{{ routes.root_url }}">
+          <img
+            src="{{ settings.logo | image_url: width: 300 }}"
+            alt="{{ settings.logo.alt | default: shop.name }}"
+            width="300"
+            height="300"
+          >
         </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="padel-navbar-logo-text font-impact">THE PADEL</a>
+      {% endif %}
+    </div>
+    <!-- Desktop Navigation -->
+    <div class="padel-navbar-links font-raleway">
+      <span class="padel-navbar-divider" aria-hidden="true"></span>
+      <a href="{{ routes.root_url }}" class="padel-navbar-link font-raleway">Accueil</a>
+      <a href="{{ routes.collections_url }}" class="padel-navbar-link font-raleway">Tournois</a>
+      <a href="{{ routes.collections_url }}" class="padel-navbar-link font-raleway">Boutique</a>
+      <a href="{{ pages['contact'].url | default: '/pages/contact' }}" class="padel-navbar-link font-raleway"
+        >Contact</a
+      >
+    </div>
 
-        <!-- Icônes header -->
-        <div class="header__icons">
-          {% if shop.customer_accounts_enabled %}
-            <a
-              href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-              class="header__icon header__icon--account link focus-inset"
-            >
-              <span class="svg-wrapper thepadel-icon">{{ 'icon-account.svg' | inline_asset_content }}</span>
-              <span class="visually-hidden">
-                {%- if customer -%}
-                  {{ 'customer.account_fallback' | t }}
-                {%- else -%}
-                  {{ 'customer.log_in' | t }}
-                {%- endif -%}
-              </span>
-            </a>
-          {% endif %}
+    <!-- Desktop Searchbar (visible ≥ 640px) -->
+    <a href="{{ routes.search_url }}" class="padel-navbar-search-icon" aria-label="Recherche">
+      <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+    </a>
 
-          <a
-            href="{{ routes.cart_url }}"
-            class="header__icon header__icon--cart link focus-inset"
-            id="cart-icon-bubble"
-          >
-            {% if cart == empty %}
-              <span class="svg-wrapper thepadel-icon">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
-            {% else %}
-              <span class="svg-wrapper thepadel-icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-            {% endif %}
-            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-            {%- if cart != empty -%}
-              <div class="cart-count-bubble">
-                {%- if cart.item_count < 100 -%}
-                  <span aria-hidden="true">{{ cart.item_count }}</span>
-                {%- endif -%}
-                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-              </div>
+    <!-- User Actions -->
+    <div class="padel-navbar-actions">
+      <a
+        href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+        class="padel-navbar-action header__icon"
+        aria-label="{{ 'customer.account_fallback' | t }}"
+      >
+        <span class="svg-wrapper">{{ 'icon-account-uniform.svg' | inline_asset_content }}</span>
+      </a>
+      <a href="{{ routes.cart_url }}" class="padel-navbar-action header__icon" id="cart-icon-bubble">
+        {% if cart == empty %}
+          <span class="svg-wrapper">{{ 'icon-cart-uniform.svg' | inline_asset_content }}</span>
+        {% else %}
+          <span class="svg-wrapper">{{ 'icon-cart-uniform.svg' | inline_asset_content }}</span>
+        {% endif %}
+
+        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+        {%- if cart != empty -%}
+          <div class="cart-count-bubble">
+            {%- if cart.item_count < 100 -%}
+              <span aria-hidden="true">{{ cart.item_count }}</span>
             {%- endif -%}
-          </a>
-        </div>
-
-        <!-- Menu mobile -->
-        <div class="thepadel-mobile-menu">
-          <button class="thepadel-hamburger" type="button" aria-label="Menu">
-            <span class="svg-wrapper">{{ 'icon-hamburger.svg' | inline_asset_content }}</span>
-          </button>
-        </div>
-      </div>
+            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+          </div>
+        {%- endif -%}
+      </a>
     </div>
 
-    <!-- Barre de recherche -->
-    <div class="thepadel-search-container">
-      <div class="thepadel-search-wrapper">
-        <form class="thepadel-search-form" action="{{ routes.search_url }}" method="get">
-          <span class="thepadel-search-icon svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
-          <input
-            class="thepadel-search-input"
-            type="search"
-            name="q"
-            placeholder="Rechercher..."
-            value="{{ search.terms | escape }}"
-            autocomplete="off"
-          >
-        </form>
+    <!-- Mobile menu button -->
+    <div class="padel-navbar-mobile-container">
+      <span class="padel-navbar-mobile-divider" aria-hidden="true"></span>
+      <button class="padel-navbar-mobile-btn" id="padel-navbar-mobile-btn" aria-label="Ouvrir le menu mobile">
+        &#9776;
+      </button>
+    </div>
+  </div>
+  <!-- Mobile menu overlay -->
+  <div class="padel-navbar-mobile-menu" id="padel-navbar-mobile-menu">
+    <button class="padel-navbar-mobile-close" id="padel-navbar-mobile-close" aria-label="Fermer le menu mobile">
+      &times;
+    </button>
+    <div class="padel-navbar-mobile-menu-links font-raleway">
+      <a href="{{ routes.root_url }}" class="padel-navbar-mobile-link font-raleway">Accueil</a>
+      <a href="{{ routes.collections_url }}" class="padel-navbar-mobile-link font-raleway">Tournois</a>
+      <a href="{{ routes.collections_url }}" class="padel-navbar-mobile-link font-raleway">Boutique</a>
+      <a href="{{ pages['contact'].url | default: '/pages/contact' }}" class="padel-navbar-mobile-link font-raleway"
+        >Contact</a
+      >
+
+      <!-- Mobile User Actions -->
+      <div class="padel-navbar-mobile-actions">
+        <a href="{{ routes.search_url }}" class="padel-navbar-mobile-action">
+          <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+          <span>Rechercher</span>
+        </a>
+        <a
+          href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+          class="padel-navbar-mobile-action"
+        >
+          <span class="svg-wrapper">{{ 'icon-account-uniform.svg' | inline_asset_content }}</span>
+          <span>Mon compte</span>
+        </a>
+        <a href="{{ routes.cart_url }}" class="padel-navbar-mobile-action">
+          {% if cart == empty %}
+            <span class="svg-wrapper">{{ 'icon-cart-uniform.svg' | inline_asset_content }}</span>
+          {% else %}
+            <span class="svg-wrapper">{{ 'icon-cart-uniform.svg' | inline_asset_content }}</span>
+          {% endif %}
+          <span>Mon panier</span>
+          {%- if cart != empty -%}
+            <div class="cart-count-bubble mobile">
+              {%- if cart.item_count < 100 -%}
+                <span aria-hidden="true">{{ cart.item_count }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </a>
       </div>
     </div>
-  </header>
-</{{ header_tag }}>
+  </div>
+</nav>
 
-{%- if settings.cart_type == 'notification' -%}
-  {%- render 'cart-notification',
-    color_scheme: section.settings.color_scheme,
-    desktop_menu_type: section.settings.menu_type_desktop
-  -%}
-{%- endif -%}
-
-{% javascript %}
-  class StickyHeader extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    connectedCallback() {
-      this.header = document.querySelector('.section-header');
-      this.headerIsAlwaysSticky =
-        this.getAttribute('data-sticky-type') === 'always' ||
-        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
-      this.headerBounds = {};
-
-      this.setHeaderHeight();
-
-      window.matchMedia('(max-width: 990px)').addEventListener('change', this.setHeaderHeight.bind(this));
-
-      if (this.headerIsAlwaysSticky) {
-        this.header.classList.add('shopify-section-header-sticky');
-      }
-
-      this.currentScrollTop = 0;
-      this.preventReveal = false;
-
-      this.onScrollHandler = this.onScroll.bind(this);
-      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
-
-      this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.addEventListener('scroll', this.onScrollHandler, false);
-
-      this.createObserver();
-    }
-
-    setHeaderHeight() {
-      document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
-    }
-
-    disconnectedCallback() {
-      this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.removeEventListener('scroll', this.onScrollHandler);
-    }
-
-    createObserver() {
-      let observer = new IntersectionObserver(
-        (entries, observer) => {
-          this.headerBounds = entries[0].intersectionRect;
-          observer.disconnect();
-        },
-        { rootMargin: `${document.documentElement.style.getPropertyValue('--header-height') || '0px'}` }
-      );
-
-      observer.observe(this.header);
-    }
-
-    onScroll() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
-        this.closeMenuDisclosure();
-      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('shopify-section-header-sticky');
-        this.header.classList.remove('shopify-section-header-hidden');
-      } else if (scrollTop <= this.headerBounds.top) {
-        this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky');
-        this.closeMenuDisclosure();
-      }
-
-      this.currentScrollTop = scrollTop;
-    }
-
-    closeMenuDisclosure() {
-      this.disclosures = this.disclosures || this.header.querySelectorAll('details[open]');
-      this.disclosures.forEach((disclosure) => disclosure.removeAttribute('open'));
-    }
-  }
-
-  customElements.define('sticky-header', StickyHeader);
-
-  // ThePadel mobile menu toggle
+<script>
   document.addEventListener('DOMContentLoaded', function () {
-    const hamburger = document.querySelector('.thepadel-hamburger');
-    const nav = document.querySelector('.thepadel-nav');
-
-    if (hamburger && nav) {
-      hamburger.addEventListener('click', function () {
-        nav.classList.toggle('thepadel-nav--open');
-        hamburger.classList.toggle('thepadel-hamburger--open');
+    var btn = document.getElementById('padel-navbar-mobile-btn');
+    var menu = document.getElementById('padel-navbar-mobile-menu');
+    var close = document.getElementById('padel-navbar-mobile-close');
+    if (btn && menu && close) {
+      btn.addEventListener('click', function () {
+        menu.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+      close.addEventListener('click', function () {
+        menu.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+      // Fermer au clic sur un lien mobile
+      menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          menu.classList.remove('open');
+          document.body.style.overflow = '';
+        });
       });
     }
   });
-{% endjavascript %}
-
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Organization",
-    "name": {{ shop.name | json }},
-    {% if settings.logo %}
-      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
-    {% endif %}
-    "sameAs": [
-      {{ settings.social_twitter_link | json }},
-      {{ settings.social_facebook_link | json }},
-      {{ settings.social_pinterest_link | json }},
-      {{ settings.social_instagram_link | json }},
-      {{ settings.social_tumblr_link | json }},
-      {{ settings.social_snapchat_link | json }},
-      {{ settings.social_youtube_link | json }},
-      {{ settings.social_vimeo_link | json }}
-    ],
-    "url": {{ request.origin | append: page.url | json }}
-  }
 </script>
 
-{%- if request.page_type == 'index' -%}
-  {% assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' %}
-  <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "WebSite",
-      "name": {{ shop.name | json }},
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {{ potential_action_target | json }},
-        "query-input": "required name=search_term_string"
-      },
-      "url": {{ request.origin | append: page.url | json }}
-    }
-  </script>
-{%- endif -%}
-
-{% schema %}
-{
-  "name": "t:sections.header.name",
-  "class": "section-header",
-  "max_blocks": 3,
-  "settings": [
-    {
-      "type": "select",
-      "id": "logo_position",
-      "options": [
-        {
-          "value": "top-left",
-          "label": "t:sections.header.settings.logo_position.options__2.label"
-        },
-        {
-          "value": "top-center",
-          "label": "t:sections.header.settings.logo_position.options__3.label"
-        },
-        {
-          "value": "middle-left",
-          "label": "t:sections.header.settings.logo_position.options__1.label"
-        },
-        {
-          "value": "middle-center",
-          "label": "t:sections.header.settings.logo_position.options__4.label"
-        }
-      ],
-      "default": "middle-left",
-      "label": "t:sections.header.settings.logo_position.label",
-      "info": "t:sections.header.settings.logo_position.info"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "default": "main-menu",
-      "label": "t:sections.header.settings.menu.label"
-    },
-    {
-      "type": "select",
-      "id": "menu_type_desktop",
-      "options": [
-        {
-          "value": "dropdown",
-          "label": "t:sections.header.settings.menu_type_desktop.options__1.label"
-        },
-        {
-          "value": "mega",
-          "label": "t:sections.header.settings.menu_type_desktop.options__2.label"
-        },
-        {
-          "value": "drawer",
-          "label": "t:sections.header.settings.menu_type_desktop.options__3.label"
-        }
-      ],
-      "default": "dropdown",
-      "label": "t:sections.header.settings.menu_type_desktop.label",
-      "info": "t:sections.header.settings.menu_type_desktop.info"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "select",
-      "id": "mobile_logo_position",
-      "options": [
-        {
-          "value": "center",
-          "label": "t:sections.header.settings.mobile_logo_position.options__1.label"
-        },
-        {
-          "value": "left",
-          "label": "t:sections.header.settings.mobile_logo_position.options__2.label"
-        }
-      ],
-      "default": "center",
-      "label": "t:sections.header.settings.mobile_logo_position.label"
-    },
-    {
-      "type": "range",
-      "id": "margin_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.header.settings.margin_bottom.label",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "t:sections.header.settings.header__1.content"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.header.settings.padding_top.label",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.header.settings.padding_bottom.label",
-      "default": 20
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_country_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_country_selector.label",
-      "info": "t:sections.header.settings.enable_country_selector.info"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_language_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_language_selector.label",
-      "info": "t:sections.header.settings.enable_language_selector.info"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_customer_avatar",
-      "default": false,
-      "label": "t:sections.header.settings.enable_customer_avatar.label",
-      "info": "t:sections.header.settings.enable_customer_avatar.info"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_line_separator",
-      "default": true,
-      "label": "t:sections.header.settings.show_line_separator.label"
-    },
-    {
-      "type": "select",
-      "id": "sticky_header_type",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
-        },
-        {
-          "value": "on-scroll-up",
-          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
-        },
-        {
-          "value": "always",
-          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
-        },
-        {
-          "value": "reduce-logo-size",
-          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
-        }
-      ],
-      "default": "on-scroll-up",
-      "label": "t:sections.header.settings.sticky_header_type.label"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "@app"
-    }
-  ]
-}
-{% endschema %}
+<link rel="stylesheet" href="{{ 'custom.css' | asset_url }}">
